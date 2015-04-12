@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructures", "DataStructures\DataStructures.csproj", "{9044A6F8-49F0-4562-B2D9-5AA69901D25E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataStructuresTests", "DataStructuresTests\DataStructuresTests.csproj", "{2280F925-91F8-4991-8541-0054E643BACC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{31032781-0F21-4362-89C7-1D69C79F386C}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9044A6F8-49F0-4562-B2D9-5AA69901D25E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9044A6F8-49F0-4562-B2D9-5AA69901D25E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9044A6F8-49F0-4562-B2D9-5AA69901D25E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9044A6F8-49F0-4562-B2D9-5AA69901D25E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2280F925-91F8-4991-8541-0054E643BACC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2280F925-91F8-4991-8541-0054E643BACC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2280F925-91F8-4991-8541-0054E643BACC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2280F925-91F8-4991-8541-0054E643BACC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
