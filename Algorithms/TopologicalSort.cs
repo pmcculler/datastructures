@@ -18,26 +18,6 @@ namespace Algorithms
             public bool permMark = false;
         }
 
-        public static List<Node> sort(List<Node> graph)
-        {
-            if (graph == null)
-                throw new ArgumentNullException("graph");
-            return TopologicalSort.sort(prepGraph(graph));
-        }
-
-        /// <summary>
-        /// Creates a dictionary mapping nodes to dependencies.
-        /// </summary>
-        /// <param name="nodes"></param>
-        /// <returns></returns>
-        private static IDictionary<Node, List<Node>> prepGraph(List<Node> nodes)
-        {
-            Dictionary<Node, List<Node>> graph = new Dictionary<Node, List<Node>>();
-            foreach (Node n in nodes)
-                graph[n] = n.dependencies;
-            return graph;
-        }
-
         /// <summary>
         /// linear: O(n), n = number of nodes
         /// Implements Tarjan, Robert E. (1976), 
@@ -46,7 +26,7 @@ namespace Algorithms
         /// </summary>
         /// <param name="graph">a directed acyclic graph</param>
         /// <returns>list of graph nodes in topological order</returns>
-        private static List<Node> sort(IDictionary<Node, List<Node>> graph)
+        public static List<Node> sort(List<Node> graph)
         {
             if (graph == null)
                 throw new ArgumentNullException("graph");
@@ -75,7 +55,7 @@ namespace Algorithms
             };
 
             // actually we only need to do this for unmarked items
-            foreach (var item in graph.Keys.ToList())
+            foreach (var item in graph)
                 search(item);
 
             if (notADAG)
