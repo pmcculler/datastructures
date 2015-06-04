@@ -30,23 +30,23 @@ namespace DataStructuresTests
     public class SuffixArrayTest
     {
         [TestMethod]
-        public void CreateSuffixArray()
+        public void SuffixArray_Create()
         {
             SuffixArray sa = new SuffixArray("");
         }
         [TestMethod]
-        public void DeadSuffixArray()
+        public void SuffixArray_Dead()
         {
             SuffixArray sa = new SuffixArray();
         }
         [TestMethod]
-        public void EmptySuffixArray()
+        public void SuffixArray_Empty()
         {
             SuffixArray sa = new SuffixArray("");
             Assert.IsFalse(sa.Contains("a"));
         }
         [TestMethod]
-        public void ItemsSuffixArray()
+        public void SuffixArray_Items()
         {
             SuffixArray sa = new SuffixArray("items");
             Assert.IsTrue(sa.Contains("items"));
@@ -65,7 +65,7 @@ namespace DataStructuresTests
             Assert.IsTrue(sa.Contains("m"));
         }
         [TestMethod]
-        public void NotItemsSuffixArray()
+        public void SuffixArray_NotItems()
         {
             SuffixArray sa = new SuffixArray("items");
             for (int i = 0; i < 20; i++)
@@ -74,13 +74,13 @@ namespace DataStructuresTests
             }
         }
         [TestMethod]
-        public void NotBackwardsItemsSuffixArray()
+        public void SuffixArray_NotBackwardsItems()
         {
             SuffixArray sa = new SuffixArray("items");
             Assert.IsFalse(sa.Contains("met"));
         }
         [TestMethod]
-        public void IndexSuffixArray()
+        public void SuffixArray_Index()
         {
             SuffixArray sa = new SuffixArray("items");
             Assert.AreEqual(0, sa.Find("items"));
@@ -90,7 +90,7 @@ namespace DataStructuresTests
             Assert.AreEqual(4, sa.Find("s"));
         }
         [TestMethod]
-        public void MultiIndexSuffixArray()
+        public void SuffixArray_MultiIndex()
         {
             SuffixArray sa = new SuffixArray("itemsitems");
             Assert.IsTrue(0 <= sa.Find("items"));

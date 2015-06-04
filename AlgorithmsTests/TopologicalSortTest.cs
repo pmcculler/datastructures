@@ -10,18 +10,18 @@ namespace AlgorithmsTests
     public class TopologicalSortTest
     {
         [TestMethod]
-        public void Empty()
+        public void TopoTest_Empty()
         {
             TopologicalSort.sort(new List<TopologicalSort.Node>());
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void Null()
+        public void TopoTest_Null()
         {
             TopologicalSort.sort(null);        
         }
         [TestMethod]
-        public void One()
+        public void TopoTest_One()
         {
             TopologicalSort.Node node = new TopologicalSort.Node();
             List<TopologicalSort.Node> nodes = new List<TopologicalSort.Node>();
@@ -31,7 +31,7 @@ namespace AlgorithmsTests
             Assert.AreEqual(sortedNodes[0], nodes[0]);
         }
         [TestMethod]
-        public void Two()
+        public void TopoTest_Two()
         {
             TopologicalSort.Node a = new TopologicalSort.Node();
             TopologicalSort.Node b = new TopologicalSort.Node();
@@ -45,7 +45,7 @@ namespace AlgorithmsTests
             Assert.AreEqual(sortedNodes[1], a);
         }
         [TestMethod]
-        public void Three()
+        public void TopoTest_Three()
         {
             TopologicalSort.Node a = new TopologicalSort.Node();
             TopologicalSort.Node b = new TopologicalSort.Node();
@@ -62,7 +62,7 @@ namespace AlgorithmsTests
             Assert.AreEqual(sortedNodes[2], a);
         }
         [TestMethod]
-        public void Multiple()
+        public void TopoTest_Multiple()
         {
             TopologicalSort.Node a = new TopologicalSort.Node();
             TopologicalSort.Node b = new TopologicalSort.Node();
@@ -83,7 +83,7 @@ namespace AlgorithmsTests
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void Circular()
+        public void TopoTest_Circular()
         {
             TopologicalSort.Node a = new TopologicalSort.Node();
             TopologicalSort.Node b = new TopologicalSort.Node();
@@ -95,7 +95,7 @@ namespace AlgorithmsTests
             List<TopologicalSort.Node> sortedNodes = TopologicalSort.sort(nodes);
         }
         [TestMethod]
-        public void NoDependencies()
+        public void TopoTest_NoDependencies()
         {
             TopologicalSort.Node a = new TopologicalSort.Node();
             TopologicalSort.Node b = new TopologicalSort.Node();

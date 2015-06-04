@@ -31,45 +31,45 @@ namespace DataStructuresTests
     public class TrieNodeTest
     {
         [TestMethod]
-        public void CreateTrieNode()
+        public void TrieNode_Create()
         {
             TrieNode trie = new TrieNode();
         }
         [TestMethod]
-        public void OneTrieNode()
+        public void TrieNode_One()
         {
             TrieNode trie = new TrieNode();
             trie.add("con");
         }
         [TestMethod]
-        public void ContainsTrieNode()
+        public void TrieNode_Contains()
         {
             TrieNode trie = new TrieNode();
             trie.add("con");
             Assert.IsTrue(trie.Contains("con"));
         }
         [TestMethod]
-        public void NotContainsUnrelatedTrieNode()
+        public void TrieNode_NotContainsUnrelated()
         {
             TrieNode trie = new TrieNode();
             trie.add("a");
             Assert.IsFalse(trie.Contains("b"));
         }
         [TestMethod]
-        public void BlankTrieNode()
+        public void TrieNode_Blank()
         {
             TrieNode trie = new TrieNode();
             trie.add("");
             Assert.IsTrue(trie.Contains(""));
         }
         [TestMethod]
-        public void EmptyTrieNode()
+        public void TrieNode_Empty()
         {
             TrieNode trie = new TrieNode();
             Assert.IsFalse(trie.Contains(""));
         }
         [TestMethod]
-        public void AllContainedTrieNode()
+        public void TrieNode_AllContained()
         {
             TrieNode trie = new TrieNode();
             string[] data = {   "abc", "abd", "abe", 
@@ -93,7 +93,7 @@ namespace DataStructuresTests
         }
 
         [TestMethod]
-        public void NotContainsTrieNode()
+        public void TrieNode_NotContains()
         {
             TrieNode trie = new TrieNode();
             trie.add("con");
@@ -108,7 +108,7 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("ooo"));
         }
         [TestMethod]
-        public void SubstringNotContainsTrieNode()
+        public void TrieNode_SubstringNotContains()
         {
             TrieNode trie = new TrieNode();
             trie.add("abcde");
@@ -125,7 +125,7 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("d"));
         }
         [TestMethod]
-        public void MultiNotContainsTrieNode()
+        public void TrieNode_MultiNotContains()
         {
             TrieNode trie = new TrieNode();
             trie.add("con");
@@ -143,6 +143,41 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("fondu"));
             Assert.IsFalse(trie.Contains("f"));
             Assert.IsFalse(trie.Contains("x"));
+        }
+
+        //// This test can take 9+ seconds.
+        //[TestMethod]
+        //public void Trie_EnglishPerf()
+        //{
+        //    string[] strings = englishStrings;
+        //    TrieNode trie = new TrieNode();
+        //    foreach (string s in strings)
+        //        trie.add(s);
+
+        //    foreach (string s in strings)
+        //        Assert.IsTrue(trie.Contains(s));
+        //}
+
+        static string[] englishWords;
+        static string[] englishStrings;
+
+        [ClassInitialize]
+        static public void init(TestContext context)
+        {
+            Util.setupBook();
+            englishStrings = Util.getManyEnglishStrings();
+            englishWords = Util.getManyEnglishWords();
+        }
+
+        [TestMethod]
+        public void Trie_EnglishWordsPerf()
+        {
+            string[] strings = englishWords;
+            TrieNode trie = new TrieNode();
+            foreach (string s in strings)
+                trie.add(s);
+            foreach (string s in strings)
+                Assert.IsTrue(trie.Contains(s));
         }
     }
 }

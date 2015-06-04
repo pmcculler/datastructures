@@ -31,7 +31,7 @@ namespace DataStructures
     [Serializable]
     public class TrieNode
     {
-        protected static char ARBITRARY_ROOT_VALUE = '_';
+        private static char ARBITRARY_ROOT_VALUE = '_';
 
         // 'me' is the current value or values. Subclasses may take advantage of this structure to create compact representations
         // such as patricia or radix tries, as they are not limited to one value per node.
