@@ -33,8 +33,19 @@ namespace DataStructuresTests
         public static string[] getManyEnglishWords()
         {
             setupBook();
-            string[] sentences = book.Split(new char[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
-            return sentences;
+            string[] words = book.Split(new char[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            return words;
+        }
+        public static string[] getManyEnglish2Grams()
+        {
+            setupBook();
+            string[] words = book.Split(new char[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            List<string> grams = new List<string>();
+
+            for (int i = 0; i < words.Length - 1; i++)
+                grams.Add(words[i] + words[i + 1]);
+
+            return grams.ToArray();
         }
     }
 }

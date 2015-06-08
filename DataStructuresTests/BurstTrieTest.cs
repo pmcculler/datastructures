@@ -50,6 +50,15 @@ namespace DataStructuresTests
             Assert.IsTrue(trie.Contains("con"));
         }
         [TestMethod]
+        public void BurstTrie_ContainsTwo()
+        {
+            BurstTrie trie = new BurstTrie();
+            trie.Add("con");
+            trie.Add("zip");
+            Assert.IsTrue(trie.Contains("con"));
+            Assert.IsTrue(trie.Contains("zip"));
+        }
+        [TestMethod]
         public void BurstTrie_NotContainsUnrelated()
         {
             BurstTrie trie = new BurstTrie();
@@ -80,6 +89,9 @@ namespace DataStructuresTests
             Assert.IsTrue(all.Contains(s));
         }
 
+        /// <summary>
+        /// Forces a bucket burst.
+        /// </summary>
         [TestMethod]
         public void BurstTrie_ReconstructBucket()
         {
@@ -96,7 +108,53 @@ namespace DataStructuresTests
             Assert.IsTrue(all.Contains("TEA"));
             Assert.IsTrue(all.Contains("TEF"));
         }
+        
+        [TestMethod]
+        public void BurstTrie_ReconstructDuplicates()
+        {
+            BurstTrie trie = new BurstTrie();
+            trie.Add("0000000");
+            trie.Add("0000001");
+            trie.Add("0000000");
 
+            List<string> allEntries = trie.GetAllEntries();
+            Assert.IsTrue(allEntries[0].Equals("0000000"));
+            Assert.IsTrue(allEntries[1].Equals("0000000"));
+            Assert.IsTrue(allEntries[2].Equals("0000001"));
+        }
+
+        [TestMethod]
+        public void BurstTrie_ReconstructOrdered()
+        {
+            BurstTrie trie = new BurstTrie();
+            trie.Add("d");
+            trie.Add("de");
+            trie.Add("abcd");
+            trie.Add("bce");
+            trie.Add("0000000");
+            trie.Add("def");
+            trie.Add("abc");
+            trie.Add("0000001");
+            trie.Add("cde");
+            trie.Add("0a");
+            trie.Add("cd");
+            trie.Add("bced");
+
+            List<string> allEntries = trie.GetAllEntries();
+            Assert.IsTrue(allEntries[0].Equals("0000000"));
+            Assert.IsTrue(allEntries[1].Equals("0000001"));
+            Assert.IsTrue(allEntries[2].Equals("0a"));
+            Assert.IsTrue(allEntries[3].Equals("abc"));
+            Assert.IsTrue(allEntries[4].Equals("abcd"));
+            Assert.IsTrue(allEntries[5].Equals("bce"));
+            Assert.IsTrue(allEntries[6].Equals("bced"));
+            Assert.IsTrue(allEntries[7].Equals("cd"));
+            Assert.IsTrue(allEntries[8].Equals("cde"));
+            Assert.IsTrue(allEntries[9].Equals("d"));
+            Assert.IsTrue(allEntries[10].Equals("de"));
+            Assert.IsTrue(allEntries[11].Equals("def"));
+        }
+        
         [TestMethod]
         public void BurstTrie_AllContained()
         {
@@ -112,6 +170,7 @@ namespace DataStructuresTests
 
             verifyPresence(trie, items);
         }
+
         protected void verifyPresence(BurstTrie trie, List<string> items)
         {
             List<string> allEntries = trie.GetAllEntries();
@@ -121,8 +180,9 @@ namespace DataStructuresTests
                 Assert.IsTrue(allEntries.Contains(s));
         }
 
+
         [TestMethod]
-        public void BurstTrie_NotContains()
+        public void BurstTrie_NotContained()
         {
             BurstTrie trie = new BurstTrie();
             trie.Add("con");
@@ -136,8 +196,17 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("nnn"));
             Assert.IsFalse(trie.Contains("ooo"));
         }
+
         [TestMethod]
-        public void BurstTrie_SubstringNotContains()
+        public void BurstTrie_SuperstringNotContained()
+        {
+            BurstTrie trie = new BurstTrie();
+            trie.Add("a");
+            Assert.IsFalse(trie.Contains("aa"));
+        }
+        
+        [TestMethod]
+        public void BurstTrie_SubstringNotContained()
         {
             BurstTrie trie = new BurstTrie();
             trie.Add("abcde");
@@ -153,8 +222,9 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("c"));
             Assert.IsFalse(trie.Contains("d"));
         }
+
         [TestMethod]
-        public void BurstTrie_MultiNotContains()
+        public void BurstTrie_MultiNotContained()
         {
             BurstTrie trie = new BurstTrie();
             trie.Add("con");
@@ -174,6 +244,9 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("x"));
         }
 
+        /// <summary>
+        /// This once caused a failure during development.
+        /// </summary>
         [TestMethod]
         public void BurstTrie_FailedString()
         {
@@ -183,6 +256,10 @@ namespace DataStructuresTests
             Assert.IsTrue(trie.Contains(s));
         }
 
+        /// <summary>
+        /// This forces a bucket burst on the default bucket size.
+        /// Note: doesn't check the defailt.
+        /// </summary>
         [TestMethod]
         public void BurstTrie_BurstBucket()
         {
@@ -201,10 +278,12 @@ namespace DataStructuresTests
             Assert.IsFalse(trie.Contains("est0"));
         }
 
+        /// <summary>
+        /// This forces a bucket burst by changing the burst threshold.
+        /// </summary>
         [TestMethod]
         public void BurstTrie_BurstBucketSimple()
         {
-            // 32 is current limit; revisit?
             BurstTrie trie = new BurstTrie();
             BurstTrie.BurstThreshold = 5;
 
@@ -261,13 +340,14 @@ namespace DataStructuresTests
 
         static string[] englishWords;
         static string[] englishStrings;
+        static string[] grams;
 
         static public void init()
         {
             Util.setupBook();
             englishStrings = Util.getManyEnglishStrings();
             englishWords = Util.getManyEnglishWords();
-
+            grams = Util.getManyEnglish2Grams();
         }
         [ClassInitialize]
         static public void init(TestContext context)
@@ -286,19 +366,43 @@ namespace DataStructuresTests
                 Assert.IsTrue(trie.Contains(s));
         }
 
+        /// <summary>
+        /// This sorts using a built-in method only, Array.Sort().
+        /// Note that this pre-filters out duplicates.
+        /// </summary>
         [TestMethod]
         public void BurstTrie_NullSortEnglishWords()
         {
-            //string[] dest = new string[englishWords.Length];
-            //System.Array.Copy(englishWords, dest, englishWords.Length);
-            //System.Array.Sort(dest);
-
-            //System.Console.Out.WriteLine("Words founnd from input and sorted: " + dest.Length);
-
             Dictionary<string, int> uniques = new Dictionary<string, int>();
-            //foreach (string s in dest)
 
             foreach (string s in englishWords)
+                if (!uniques.ContainsKey(s))
+                    uniques.Add(s, 1);
+                else
+                    uniques[s] = uniques[s] + 1;
+
+            string[] toSort = new string[uniques.Keys.Count];
+            uniques.Keys.CopyTo(toSort, 0);
+            System.Array.Sort(toSort);
+
+            System.Console.Out.WriteLine("unique words found: " + uniques.Keys.Count);
+        }
+        
+        /// <summary>
+        /// This sorts using a built-in method only, Array.Sort().
+        /// Note that this does not pre-filter out duplicates.
+        /// </summary>
+        [TestMethod]
+        public void BurstTrie_NullSortEnglish2Grams()
+        {
+            string[] sortableGrams = new string[grams.Length];
+            for (int i = 0; i < grams.Length; i++)
+                sortableGrams[i] = grams[i];
+            System.Array.Sort(sortableGrams);
+
+            Dictionary<string, int> uniques = new Dictionary<string, int>();
+
+            foreach (string s in sortableGrams)
                 if (!uniques.ContainsKey(s))
                     uniques.Add(s, 1);
                 else
@@ -314,6 +418,8 @@ namespace DataStructuresTests
         [TestMethod]
         public void BurstTrie_SortEnglishWords()
         {
+            System.Console.Out.WriteLine("Total possibly duplicated words in input: " + englishWords.Length);
+
             string[] strings = englishWords;
             BurstTrie trie = new BurstTrie();
             foreach (string s in strings)
@@ -322,35 +428,39 @@ namespace DataStructuresTests
             List<string> sorted = trie.GetAllEntries();
             System.Console.Out.WriteLine("Words found through reconstruction: " + sorted.Count);
 
-            Dictionary<string, int> uniques = new Dictionary<string, int>();
-            foreach (string s in sorted)
-                if (!uniques.ContainsKey(s))
-                    uniques.Add(s, 1);
-                else
-                    uniques[s] = uniques[s] + 1;
+            //Dictionary<string, int> uniques = new Dictionary<string, int>();
+            //foreach (string s in sorted)
+            //    if (!uniques.ContainsKey(s))
+            //        uniques.Add(s, 1);
+            //    else
+            //        uniques[s] = uniques[s] + 1;
 
-            System.Console.Out.WriteLine("unique words found: " + uniques.Keys.Count);
+            //System.Console.Out.WriteLine("unique words found: " + uniques.Keys.Count);
         }
 
-        //[TestMethod]
-        //public void BurstTrie_SortEnglishWordsCharArrays()
-        //{
-        //    string[] strings = englishWords;
-        //    BurstTrie trie = new BurstTrie();
-        //    foreach (string s in strings)
-        //        trie.add(s);
+        [TestMethod]
+        public void BurstTrie_SortEnglish2Grams()
+        {
+            System.Console.Out.WriteLine("Total possibly duplicated words in input: " + grams.Length);
 
-        //    List<char[]> sorted = trie.GetAllEntriesAsArrays();
-        //    System.Console.Out.WriteLine("Words found through reconstruction: " + sorted.Count);
+            string[] strings = grams;
+            BurstTrie trie = new BurstTrie();
+            foreach (string s in strings)
+                trie.Add(s); ;
 
-        //    //Dictionary<string, int> uniques = new Dictionary<string, int>();
-        //    //foreach (char[] s in sorted)
-        //    //    if (!uniques.ContainsKey(s))
-        //    //        uniques.Add(s, 1);
-        //    //    else
-        //    //        uniques[s] = uniques[s] + 1;
+            List<string> sorted = trie.GetAllEntries();
+            System.Console.Out.WriteLine("Words found through reconstruction: " + sorted.Count);
 
-        //    //System.Console.Out.WriteLine("unique words found: " + uniques.Keys.Count);
-        //}
+            //Dictionary<string, int> uniques = new Dictionary<string, int>();
+            //foreach (string s in sorted)
+            //    if (!uniques.ContainsKey(s))
+            //        uniques.Add(s, 1);
+            //    else
+            //        uniques[s] = uniques[s] + 1;
+
+            //System.Console.Out.WriteLine("unique words found: " + uniques.Keys.Count);
+        }
+
+        // TODO write minimal test that shows some duplicate words are not reconstructed.
     }
 }

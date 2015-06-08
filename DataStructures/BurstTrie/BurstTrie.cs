@@ -48,12 +48,20 @@ namespace DataStructures
         public bool Contains(string word) { return isPresent(word.ToCharArray()); }
         public bool Contains(char[] word) { return isPresent(word); }
 
+        /// <summary>
+        /// NOTE THIS METHOD HAS A BEHAVIOR YOU MAY CARE ABOUT.
+        /// Duplicate words are not always tracked separately,
+        /// so they may be 'collapsed' into single entries here.
+        /// To fix this, BurstTrieNodes must carry 'end' as an integer, not just a boolean.
+        /// </summary>
+        /// <returns></returns>
         public List<string> GetAllEntries()
         {
             List<string> items = new List<string>();
             root.reconstruct(new char[128], 0, items);
             return items;
         }
+
         public static short BurstThreshold
         {
             get

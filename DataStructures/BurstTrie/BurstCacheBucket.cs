@@ -72,6 +72,9 @@ namespace DataStructures
             if (word.Length == start)
                 return end;
 
+            if (itemCount == 0)
+                return false;
+
             for (int i = 0; i < itemCount -1; i++)
             {
                 int suffixStart = itemPositions[i];
@@ -200,7 +203,9 @@ namespace DataStructures
             else return 1;
         }
 
-        void QuicksortBucket(List<int> elements, int left, int right)
+        // TODO candidate for its own unit tests.
+        // List<int> might be faster?
+        void QuicksortBucket(int[] elements, int left, int right)
         {
             int i = left, j = right;
             int pivot = elements[(left + right) / 2];
@@ -246,13 +251,14 @@ namespace DataStructures
             if (itemCount == 0) // there's nothing here
                 return;
 
-            List<int> sortCopy = new List<int>();
-            for(int i = 0; i < itemCount; i++)  // last is not a word start
-                sortCopy.Add(itemPositions[i]);
+            int[] sortCopy = new int[itemCount];
+            for(int i = 0; i < itemCount; i++)
+                sortCopy[i] = itemPositions[i];
 
-            // TODO try alternate algorithms
-            QuicksortBucket(sortCopy, 0, sortCopy.Count - 1);
-            for (int i = 0; i < sortCopy.Count; i++)
+            // TODO try alternate algorithms: radix MSD, etc.
+            QuicksortBucket(sortCopy, 0, sortCopy.Length - 1);
+
+            for (int i = 0; i < sortCopy.Length; i++)
             {
                 int suffixStart = sortCopy[i];
                 char c = itemSpace[suffixStart];

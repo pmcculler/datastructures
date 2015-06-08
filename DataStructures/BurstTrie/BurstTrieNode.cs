@@ -34,7 +34,9 @@ namespace DataStructures
         // static char ARBITRARY_ROOT_VALUE = '_';  // debugging
         //        protected char me = ARBITRARY_ROOT_VALUE;  // arbitrary root node  // only useful for debug really
         
-        static int TRIE_WIDTH = 128;        
+        readonly static int TRIE_WIDTH = 128;
+        readonly static int MINIMAL_WIDTH_USE = 32;  // standard ascii
+        readonly static int MAXIMAL_WIDTH_USE = 126;  // standard ascii
         BurstNavigable[] next = null;
 
         /// <summary>
@@ -53,7 +55,7 @@ namespace DataStructures
             if (end)
                 pile.Add(new string(trail, 0, length));
 
-            for (int i = 0; i < next.Length; i++) // TODO: optimize by holding onto minimum, maximum values used
+            for (int i = MINIMAL_WIDTH_USE; i < MAXIMAL_WIDTH_USE; i++) // TODO: optimize by holding onto minimum, maximum values actually used in this node
             {
                 BurstNavigable node = next[i];
                 if (node != null)
