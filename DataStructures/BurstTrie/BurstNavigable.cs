@@ -22,22 +22,19 @@ SOFTWARE. */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataStructures
 {
     [Serializable]
     abstract class BurstNavigable
     {
-        abstract public void Add(char[] word);
-        abstract public void Add(char[] word, int start);
-        abstract public bool isPresent(char[] word, int start);
-        abstract public bool isPresent(char[] word);
-        public bool shouldBurst;
-        public bool end = false; // note: can save a lot of space by moving this to a static / separate 'ends' hash/flag set OR
+        public abstract void Add(char[] word);
+        public abstract void Add(char[] word, int start);
+        public abstract bool IsPresent(char[] word, int start);
+        public abstract bool IsPresent(char[] word);
+        public bool ShouldBurst;
+        public bool End = false; // note: can save a lot of space by moving this to a static / separate 'ends' hash/flag set OR
         // using a special termination slot in the next[] array.
-        abstract public void reconstruct(char[] trail, int length, List<string> pile);
+        public abstract void Reconstruct(char[] trail, int length, List<string> pile);
     }
 }

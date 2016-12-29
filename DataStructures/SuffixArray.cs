@@ -21,22 +21,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 namespace DataStructures
 {
     public class SuffixArray
     {
-        private int[] indexes = new int[] { };
-        private char[] source = new char[] { };
+        private int[] _indexes = { };
+        private readonly char[] _source = { };
 
         public SuffixArray(string s)
         {
-            source = s.ToCharArray();
-            updateIndex();
+            _source = s.ToCharArray();
+            UpdateIndex();
         }
 
         // This creates it in a useless state.
@@ -48,44 +46,47 @@ namespace DataStructures
         {
             return Find(s.ToCharArray());
         }
+
         // Find an instance, not necessarily the first one in the source.
         // Searching for a zero-length string gives undefined results. Don't.
         public int Find(char[] chars)
         {
             // TODO: avoid creating a new searcher object every time.
             Searcher search = new Searcher(this, chars);
-            int k = Array.BinarySearch<int>(indexes, 0, search);
-            return search.sourceIndex;
+            // ReSharper disable once UnusedVariable
+            int k = Array.BinarySearch(_indexes, 0, search);
+            return search.SourceIndex;
         }
+
         // Searching for a zero-length string gives undefined results. Don't.
         public bool Contains(string s)
         {
             return (Find(s) > -1);
         }
 
-        protected void updateIndex()
+        protected void UpdateIndex()
         {
-            indexes = new int[source.Length];
-            for (int i = 0; i < indexes.Length; i++)
-                indexes[i] = i;
+            _indexes = new int[_source.Length];
+            for (int i = 0; i < _indexes.Length; i++)
+                _indexes[i] = i;
             Sorter sort = new Sorter(this);
-            System.Array.Sort<int>(indexes, sort);
+            Array.Sort(_indexes, sort);
         }
 
         public class Sorter : IComparer<int>
         {
-            private long comparisons = 0;
-            private long char_comparisons = 0;
+            private long _comparisons;
+            private long _charComparisons;
 
-            private SuffixArray sa;
+            private readonly SuffixArray _sa;
             public Sorter(SuffixArray sa)
             {
-                this.sa = sa;
+                _sa = sa;
             }
 
             public int Compare(int a, int b)
             {
-                comparisons++;
+                _comparisons++;
                 // consider each int an index into sa.source
                 // do a linear char by char comparison to see which is alphabetically before which
                 // jumping out as soon as we can of course.
@@ -96,15 +97,15 @@ namespace DataStructures
                 int i = a, j = b;
 
                 StringBuilder sb = new StringBuilder();
-                for (; i < sa.source.Length && j < sa.source.Length; i++, j++)
+                for (; i < _sa._source.Length && j < _sa._source.Length; i++, j++)
                 {
-                    char_comparisons++;
-                    char ca = sa.source[i];
-                    char cb = sa.source[j];
+                    _charComparisons++;
+                    char ca = _sa._source[i];
+                    char cb = _sa._source[j];
                     sb.Append(ca);
                     if (ca < cb)
                         return -1;
-                    else if (ca > cb)
+                    if (ca > cb)
                         return 1;
                 }
                 // the same all the way to the end of the source? seems kind of unlikely.
@@ -115,31 +116,31 @@ namespace DataStructures
 
         public class Searcher : IComparer<int>
         {
-            private SuffixArray sa;
-            private char[] sought;
+            private readonly SuffixArray _sa;
+            private readonly char[] _sought;
             public Searcher(SuffixArray sa, char[] sought)
             {
-                this.sa = sa;
-                this.sought = sought;
+                _sa = sa;
+                _sought = sought;
             }
 
-            public int sourceIndex = -1;
+            public int SourceIndex = -1;
             // argument b is always ignored.
             // instead, we compare source[a] with sought[0] and move forwards
             public int Compare(int a, int b)
             {
                 int i = a, j = 0;
 
-                for (; i < sa.source.Length && j < sought.Length; i++, j++)
+                for (; i < _sa._source.Length && j < _sought.Length; i++, j++)
                 {
-                    char ca = sa.source[i];
-                    char cb = sought[j];
+                    char ca = _sa._source[i];
+                    char cb = _sought[j];
                     if (ca < cb)
                         return -1;
-                    else if (ca > cb)
+                    if (ca > cb)
                         return 1;
                 }
-                sourceIndex = a;
+                SourceIndex = a;
                 return 0;
             }
         }

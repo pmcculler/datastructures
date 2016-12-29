@@ -22,9 +22,6 @@ SOFTWARE. */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataStructures
 {
@@ -34,73 +31,72 @@ namespace DataStructures
         // static char ARBITRARY_ROOT_VALUE = '_';  // debugging
         //        protected char me = ARBITRARY_ROOT_VALUE;  // arbitrary root node  // only useful for debug really
         
-        readonly static int TRIE_WIDTH = 128;
-        readonly static int MINIMAL_WIDTH_USE = 32;  // standard ascii
-        readonly static int MAXIMAL_WIDTH_USE = 126;  // standard ascii
-        BurstNavigable[] next = null;
+        const int TRIE_WIDTH = 128;
+        const int MINIMAL_WIDTH_USE = 32;  // standard ascii
+        const int MAXIMAL_WIDTH_USE = 126;  // standard ascii
+        BurstNavigable[] _next;
 
         /// <summary>
         /// Exports the whole trie into the supplied list.
         /// </summary>
-        /// <param name="trail"></param>
-        /// <param name="pile"></param>
-        public override void reconstruct(char[] trail, int length, List<string> pile)
+        public override void Reconstruct(char[] trail, int length, List<string> pile)
         {
-            if (next == null)
+            if (_next == null)
             {
                 pile.Add(new string(trail, 0, length));
-                // end of trail. build string and add to pile.
+                // end of trail. build string and Add to pile.
                 return;
             }
-            if (end)
+            if (End)
                 pile.Add(new string(trail, 0, length));
 
             for (int i = MINIMAL_WIDTH_USE; i < MAXIMAL_WIDTH_USE; i++) // TODO: optimize by holding onto minimum, maximum values actually used in this node
             {
-                BurstNavigable node = next[i];
+                BurstNavigable node = _next[i];
                 if (node != null)
                 {
                     trail[length] = (char)i;
-                    node.reconstruct(trail, length + 1, pile);
+                    node.Reconstruct(trail, length + 1, pile);
                 }
             }
         }
 
-        public List<string> getAllEntries()
+        public List<string> GetAllEntries()
         {
             List<string> items = new List<string>();
-            reconstruct(new char[128], 0, items);
+            Reconstruct(new char[128], 0, items);
             return items;
         }
 
-        public bool isPresent(string word) { return isPresent(word.ToCharArray()); }
-        public bool Contains(string word) { return isPresent(word.ToCharArray()); }
-        public bool Contains(char[] word) { return isPresent(word); }
+        public bool IsPresent(string word) { return IsPresent(word.ToCharArray()); }
+        public bool Contains(string word) { return IsPresent(word.ToCharArray()); }
+        public bool Contains(char[] word) { return IsPresent(word); }
 
         /// <summary>
         /// Searches compacted and uncompacted trie.
         /// </summary>
         /// <param name="word"></param>
         /// <returns></returns>
-        public override bool isPresent(char[] word)
+        public override bool IsPresent(char[] word)
         {
-            return isPresent(word, 0);
+            return IsPresent(word, 0);
         }
 
-        public override bool isPresent(char[] word, int start)
+        public override bool IsPresent(char[] word, int start)
         {
             if (word.Length == start)
-                return end;
+                return End;
 
-            if (next == null)
+            if (_next == null)
                 return false; // there's no further to look!
 
-            BurstNavigable target = next[word[start]];
+            BurstNavigable target = _next[word[start]];
             if (target == null)
                 return false;  // no potentially matching suffix
 
-            return target.isPresent(word, start + 1);  // 1 = me.Length
+            return target.IsPresent(word, start + 1);  // 1 = me.Length
         }
+
         public void Add(string word) { Add(word.ToCharArray()); }
 
         /// <summary>
@@ -116,38 +112,40 @@ namespace DataStructures
         {
             if (word.Length == start)
             {
-                end = true;
+                End = true;
                 return;
             }
             int c = (int)word[start];
 
-            if (next == null)
-                next = new BurstNavigable[TRIE_WIDTH];
+            if (_next == null)
+                _next = new BurstNavigable[TRIE_WIDTH];
 
-            BurstNavigable target = next[c];
+            BurstNavigable target = _next[c];
 
             if (target == null)
             {
                 // always start with a bucket.
                 target = new BurstCacheBucket();
-                next[c] = target;
+                _next[c] = target;
             }
-            else if (target.shouldBurst)  // else OK because there's never any need to burst a brand new bucket
+            else if (target.ShouldBurst)  // else OK because there's never any need to burst a brand new bucket
             {
-                target = burstThisBucket(target);
-                next[c] = target;
+                target = BurstThisBucket(target);
+                _next[c] = target;
             }
 
             target.Add(word, start + 1);
         }
 
-        BurstTrieNode burstThisBucket(BurstNavigable bucketIn)
+        BurstTrieNode BurstThisBucket(BurstNavigable bucketIn)
         {
             BurstCacheBucket bucket = (BurstCacheBucket)bucketIn;
-            BurstTrieNode node = new BurstTrieNode();
+            BurstTrieNode node = new BurstTrieNode
+            {
+                _next = new BurstNavigable[TRIE_WIDTH],
+                End = bucket.End
+            };
 //            node.me = key;  // debug only
-            node.next = new BurstNavigable[TRIE_WIDTH];
-            node.end = bucket.end;
 
             // TODO maybe make this a higher performance construct?
             foreach(ArraySegment<char> item in bucket)
@@ -155,31 +153,31 @@ namespace DataStructures
 
                 if (item.Count == 1) // in this case the suffix is consumed by the new trie node + entry (empty destination bucket, maybe, or now creating and adding to)
                 {
-                    if (node.next[(int)item.Array[item.Offset]] == null)
+                    if (node._next[(int)item.Array[item.Offset]] == null)
                     {
                         BurstCacheBucket emptyBucket = new BurstCacheBucket();
-                        emptyBucket.end = true;
-                        node.next[(int)item.Array[item.Offset]] = emptyBucket;  // only needed if it was not there, so maybe save this assignment
+                        emptyBucket.End = true;
+                        node._next[(int)item.Array[item.Offset]] = emptyBucket;  // only needed if it was not there, so maybe save this assignment
                         continue;
                     }
                     else // already a bucket there, from previous iteration in this loop
                     {
-                        BurstCacheBucket reusingBucket = (BurstCacheBucket)node.next[(int)item.Array[item.Offset]];
-                        reusingBucket.end = true;
+                        BurstCacheBucket reusingBucket = (BurstCacheBucket)node._next[(int)item.Array[item.Offset]];
+                        reusingBucket.End = true;
                         continue;
                     }
                 }
                 
                 else // there is more suffix that's not consumed by the new trie node + entry, so create / fill bucket
                 {
-                    BurstNavigable nav = node.next[(int)item.Array[item.Offset]];
+                    BurstNavigable nav = node._next[(int)item.Array[item.Offset]];
                     if (nav == null)
                     {
                         BurstCacheBucket newBucket = new BurstCacheBucket();
                         char[] arr = item.Array;
                         int offset = item.Offset;
                         newBucket.Add(arr, offset + 1, item.Count - 1);
-                        node.next[(int)arr[offset]] = newBucket;
+                        node._next[(int)arr[offset]] = newBucket;
                     }
                     else
                     {

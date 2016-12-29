@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DataStructures
 {
@@ -35,56 +34,56 @@ namespace DataStructures
 
         // 'me' is the current value or values. Subclasses may take advantage of this structure to create compact representations
         // such as patricia or radix tries, as they are not limited to one value per node.
-        protected char[] me = new char[] { ARBITRARY_ROOT_VALUE };  // arbitrary root node
-        protected TrieNode[] next = null;
-        protected bool end = false; // note: can save a lot of space by moving this to a static / separate 'ends' hash/flag set
+        protected char[] me = { ARBITRARY_ROOT_VALUE };  // arbitrary root node
+        protected TrieNode[] next;
+        protected bool end; // note: can save a lot of space by moving this to a static / separate 'ends' hash/flag set
 
         /// <summary>
         /// Exports the whole trie into the supplied list
         /// </summary>
         /// <param name="trail"></param>
         /// <param name="pile"></param>
-        protected void reconstruct(Stack<char[]> trail, List<string> pile)
+        protected void Reconstruct(Stack<char[]> trail, List<string> pile)
         {
-            char[] textHere = stringRepresentation().ToCharArray(); // roundabout, to let subclasses fiddle with storage
+            char[] textHere = StringRepresentation().ToCharArray(); // roundabout, to let subclasses fiddle with storage
 
             if (textHere[0] != ARBITRARY_ROOT_VALUE)  // arbitrary root
                 trail.Push(textHere);
             
             if (next == null)
             {
-                pile.Add(buildString(trail));
-                // end of trail. build string and add to pile.
+                pile.Add(BuildString(trail));
+                // end of trail. build string and Add to pile.
                 trail.Pop();
                 return;
             }
             if (end)
-                pile.Add(buildString(trail));
+                pile.Add(BuildString(trail));
 
             foreach (TrieNode node in next)
-                node.reconstruct(trail, pile);
+                node.Reconstruct(trail, pile);
 
             if (trail.Count > 0)
                 trail.Pop();
         }
 
-        public List<string> getAllEntries()
+        public List<string> GetAllEntries()
         {
             List<string> items = new List<string>();
-            reconstruct(new Stack<char[]>(), items);
+            Reconstruct(new Stack<char[]>(), items);
             return items;
         }
 
-        public bool isPresent(string word) { return isPresent(word.ToCharArray()); }
-        public bool Contains(string word) { return isPresent(word.ToCharArray()); }
-        public bool Contains(char[] word) { return isPresent(word); }
+        public bool IsPresent(string word) { return IsPresent(word.ToCharArray()); }
+        public bool Contains(string word) { return IsPresent(word.ToCharArray()); }
+        public bool Contains(char[] word) { return IsPresent(word); }
 
         /// <summary>
         /// Searches compacted and uncompacted trie.
         /// </summary>
         /// <param name="word"></param>
         /// <returns></returns>
-        public bool isPresent(char[] word)
+        public bool IsPresent(char[] word)
         {
             if (word.Length == 0)
                 return end;
@@ -112,18 +111,18 @@ namespace DataStructures
                     char[] newWord = new char[word.Length - node.me.Length];
                     for (int i = node.me.Length, j = 0; j < word.Length - node.me.Length; i++, j++)
                         newWord[j] = word[i];
-                    return node.isPresent(newWord);
+                    return node.IsPresent(newWord);
                 }
             }
             return false;
         }
-        public void add(string word) { add(word.ToCharArray()); }
+        public void Add(string word) { Add(word.ToCharArray()); }
 
         /// <summary>
         /// Adds word to tree; only adds singles, does not maintain patricia/radix style.
         /// </summary>
         /// <param name="word"></param>
-        public void add(char[] word)
+        public void Add(char[] word)
         {
             if (word.Length == 0)
             {
@@ -147,10 +146,9 @@ namespace DataStructures
 
             if (target == null)
             {
-                target = new TrieNode();
-                target.me = new char[] { c };
+                target = new TrieNode {me = new[] {c}};
                 TrieNode[] newNext = new TrieNode[next.Length + 1];  // expands the array of children
-                System.Array.Copy(next, newNext, next.Length);
+                Array.Copy(next, newNext, next.Length);
                 newNext[next.Length] = target;
                 next = newNext;
             }
@@ -159,11 +157,11 @@ namespace DataStructures
             for (int i = 1, j = 0; j < word.Length - 1; i++, j++)
                 newWord[j] = word[i];
 
-            target.add(newWord);
+            target.Add(newWord);
         }
 
         #region utility       
-        protected static string buildString(Stack<char[]> chunks)
+        protected static string BuildString(Stack<char[]> chunks)
         {
             var v = chunks.Reverse();
             StringBuilder sb = new StringBuilder();
@@ -174,7 +172,7 @@ namespace DataStructures
             return sb.ToString();
         }
         // This method is to let subclasses fiddle with storage.
-        virtual protected string stringRepresentation()
+        protected virtual string StringRepresentation()
         {
             return new string(me);
         }

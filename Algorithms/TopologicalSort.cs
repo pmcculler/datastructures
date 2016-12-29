@@ -1,8 +1,27 @@
-﻿using System;
+﻿/* The MIT License (MIT)
+
+Copyright (c) 2015 Patrick McCuller
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE. */
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Algorithms
 {
@@ -11,11 +30,11 @@ namespace Algorithms
         public class Node
         {
             // "I am dependent on these nodes..."
-            public List<Node> dependencies = new List<Node>();
+            public List<Node> Dependencies = new List<Node>();
 
             // toposort attributes
-            public bool tempMark = false;
-            public bool permMark = false;
+            public bool tempMark;
+            public bool permMark;
         }
 
         /// <summary>
@@ -26,27 +45,27 @@ namespace Algorithms
         /// </summary>
         /// <param name="graph">a directed acyclic graph</param>
         /// <returns>list of graph nodes in topological order</returns>
-        public static List<Node> sort(List<Node> graph)
+        public static List<Node> Sort(List<Node> graph)
         {
             if (graph == null)
-                throw new ArgumentNullException("graph");
+                throw new ArgumentNullException(nameof(graph));
 
             List<Node> result = new List<Node>();
 
             Action<Node> search = null; // separate defition from assignment to allow recursion
-            bool notADAG = false;
+            bool notAdag = false;
 
             search = item =>
             {
                 if (item.tempMark)
                 {
-                    notADAG = true;
+                    notAdag = true;
                     return;  // this is not a DAG!
                 }
                 if (!item.permMark)
                 {
                     item.tempMark = true;
-                    foreach (Node dependency in item.dependencies)
+                    foreach (Node dependency in item.Dependencies)
                         search(dependency);
                     item.permMark = true;
                     item.tempMark = false;
@@ -58,8 +77,8 @@ namespace Algorithms
             foreach (var item in graph)
                 search(item);
 
-            if (notADAG)
-                throw new ArgumentException("Must be an acyclic graph.", "graph");
+            if (notAdag)
+                throw new ArgumentException("Must be an acyclic graph.", nameof(graph));
 
             return result;
         }

@@ -15,7 +15,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -45,6 +45,10 @@
     <Compile Include="BurstTrie\BurstNavigable.cs" />
     <Compile Include="BurstTrie\BurstTrie.cs" />
     <Compile Include="BurstTrie\BurstTrieNode.cs" />
+    <Compile Include="CuckooHash.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="Hashes.cs" />
+    <Compile Include="Preconditions.cs" />
     <Compile Include="SuffixArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrieNode.cs" />

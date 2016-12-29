@@ -1,51 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace DataStructuresTests
 {
     public class Util
     {
-        static string book = null;
+        static string _book;
+        static readonly Random random = new Random();
 
         // call ahead of time if you want to do timing with later methods.
-        static public void setupBook()
+        public static void SetupBook()
         {
-            if (book == null)
+            if (_book == null)
             {
-                book = File.ReadAllText(@"C:\Users\Patrick\Documents\pg100.txt");
+                _book = File.ReadAllText(@"..\..\pg100.txt");
             }
         }
-        public static char[] getLargeArray()
+        public static char[] GetLargeArray()
         {
-            setupBook();
-            return book.ToCharArray();
+            SetupBook();
+            return _book.ToCharArray();
         }
-        public static string[] getManyEnglishStrings()
+        public static string[] GetManyEnglishStrings()
         {
-            setupBook();
-            string[] sentences = book.Split(new char[] { '.', '?', '!' });
+            SetupBook();
+            string[] sentences = _book.Split('.', '?', '!');
             return sentences;
         }
-        public static string[] getManyEnglishWords()
+        public static string[] GetManyEnglishWords()
         {
-            setupBook();
-            string[] words = book.Split(new char[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            SetupBook();
+            string[] words = _book.Split(new[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
             return words;
         }
-        public static string[] getManyEnglish2Grams()
+        public static string[] GetManyEnglish2Grams()
         {
-            setupBook();
-            string[] words = book.Split(new char[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
+            SetupBook();
+            string[] words = _book.Split(new[] { '.', '?', '!', '\'', '"', '\r', '\n', ' ', ';', ':', '(', ')', '-', '/', '<', '>', ']', '[', ',' }, StringSplitOptions.RemoveEmptyEntries);
             List<string> grams = new List<string>();
 
             for (int i = 0; i < words.Length - 1; i++)
                 grams.Add(words[i] + words[i + 1]);
 
             return grams.ToArray();
+        }
+
+        public static string RandomString(int length = 0)
+        {
+            if (length == 0)
+                return string.Empty;
+            StringBuilder builder = new StringBuilder();
+            for(int i = 0; i < length; i++)
+            {
+                builder.Append(((char)random.Next(255 - 33) + 33));
+            }
+            return builder.ToString();
         }
     }
 }

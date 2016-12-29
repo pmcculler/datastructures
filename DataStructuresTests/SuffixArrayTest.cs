@@ -20,7 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DataStructures;
 
@@ -32,19 +31,24 @@ namespace DataStructuresTests
         [TestMethod]
         public void SuffixArray_Create()
         {
+            // ReSharper disable once UnusedVariable
             SuffixArray sa = new SuffixArray("");
         }
+
         [TestMethod]
         public void SuffixArray_Dead()
         {
+            // ReSharper disable once UnusedVariable
             SuffixArray sa = new SuffixArray();
         }
+
         [TestMethod]
         public void SuffixArray_Empty()
         {
             SuffixArray sa = new SuffixArray("");
             Assert.IsFalse(sa.Contains("a"));
         }
+
         [TestMethod]
         public void SuffixArray_Items()
         {
@@ -64,6 +68,7 @@ namespace DataStructuresTests
             Assert.IsTrue(sa.Contains("e"));
             Assert.IsTrue(sa.Contains("m"));
         }
+
         [TestMethod]
         public void SuffixArray_NotItems()
         {
@@ -73,12 +78,14 @@ namespace DataStructuresTests
                 Assert.IsFalse(sa.Contains(i.ToString()));
             }
         }
+
         [TestMethod]
         public void SuffixArray_NotBackwardsItems()
         {
             SuffixArray sa = new SuffixArray("items");
             Assert.IsFalse(sa.Contains("met"));
         }
+
         [TestMethod]
         public void SuffixArray_Index()
         {
@@ -89,6 +96,7 @@ namespace DataStructuresTests
             Assert.AreEqual(3, sa.Find("ms"));
             Assert.AreEqual(4, sa.Find("s"));
         }
+
         [TestMethod]
         public void SuffixArray_MultiIndex()
         {

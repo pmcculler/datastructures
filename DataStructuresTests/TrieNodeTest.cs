@@ -20,7 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DataStructures;
@@ -33,33 +32,34 @@ namespace DataStructuresTests
         [TestMethod]
         public void TrieNode_Create()
         {
+            // ReSharper disable once UnusedVariable
             TrieNode trie = new TrieNode();
         }
         [TestMethod]
         public void TrieNode_One()
         {
             TrieNode trie = new TrieNode();
-            trie.add("con");
+            trie.Add("con");
         }
         [TestMethod]
         public void TrieNode_Contains()
         {
             TrieNode trie = new TrieNode();
-            trie.add("con");
+            trie.Add("con");
             Assert.IsTrue(trie.Contains("con"));
         }
         [TestMethod]
         public void TrieNode_NotContainsUnrelated()
         {
             TrieNode trie = new TrieNode();
-            trie.add("a");
+            trie.Add("a");
             Assert.IsFalse(trie.Contains("b"));
         }
         [TestMethod]
         public void TrieNode_Blank()
         {
             TrieNode trie = new TrieNode();
-            trie.add("");
+            trie.Add("");
             Assert.IsTrue(trie.Contains(""));
         }
         [TestMethod]
@@ -79,13 +79,13 @@ namespace DataStructuresTests
             List<string> items = new List<string>(data);
 
             foreach (string s in items)
-                trie.add(s);
+                trie.Add(s);
 
-            verifyPresence(trie, items);
+            VerifyPresence(trie, items);
         }
-        protected void verifyPresence(TrieNode trie, List<string> items)
+        protected void VerifyPresence(TrieNode trie, List<string> items)
         {
-            List<string> allEntries = trie.getAllEntries();
+            List<string> allEntries = trie.GetAllEntries();
             Assert.AreEqual(allEntries.Count, items.Count);
 
             foreach (string s in items)
@@ -96,7 +96,7 @@ namespace DataStructuresTests
         public void TrieNode_NotContains()
         {
             TrieNode trie = new TrieNode();
-            trie.add("con");
+            trie.Add("con");
             Assert.IsFalse(trie.Contains("coo"));
             Assert.IsFalse(trie.Contains("cona"));
             Assert.IsFalse(trie.Contains("ocon"));
@@ -111,7 +111,7 @@ namespace DataStructuresTests
         public void TrieNode_SubstringNotContains()
         {
             TrieNode trie = new TrieNode();
-            trie.add("abcde");
+            trie.Add("abcde");
             Assert.IsFalse(trie.Contains("a"));
             Assert.IsFalse(trie.Contains("ab"));
             Assert.IsFalse(trie.Contains("abc"));
@@ -128,11 +128,11 @@ namespace DataStructuresTests
         public void TrieNode_MultiNotContains()
         {
             TrieNode trie = new TrieNode();
-            trie.add("con");
-            trie.add("cono");
-            trie.add("foo");
-            trie.add("fon");
-            trie.add("fondue");
+            trie.Add("con");
+            trie.Add("cono");
+            trie.Add("foo");
+            trie.Add("fon");
+            trie.Add("fondue");
 
             Assert.IsTrue(trie.Contains("con"));
             Assert.IsTrue(trie.Contains("fon"));
@@ -152,30 +152,29 @@ namespace DataStructuresTests
         //    string[] strings = englishStrings;
         //    TrieNode trie = new TrieNode();
         //    foreach (string s in strings)
-        //        trie.add(s);
+        //        trie.Add(s);
 
         //    foreach (string s in strings)
         //        Assert.IsTrue(trie.Contains(s));
         //}
 
-        static string[] englishWords;
-        static string[] englishStrings;
+        static string[] _englishWords;
 
         [ClassInitialize]
-        static public void init(TestContext context)
+        public static void init(TestContext context)
         {
-            Util.setupBook();
-            englishStrings = Util.getManyEnglishStrings();
-            englishWords = Util.getManyEnglishWords();
+            Util.SetupBook();
+            Util.GetManyEnglishStrings();
+            _englishWords = Util.GetManyEnglishWords();
         }
 
         [TestMethod]
         public void Trie_EnglishWordsPerf()
         {
-            string[] strings = englishWords;
+            string[] strings = _englishWords;
             TrieNode trie = new TrieNode();
             foreach (string s in strings)
-                trie.add(s);
+                trie.Add(s);
             foreach (string s in strings)
                 Assert.IsTrue(trie.Contains(s));
         }

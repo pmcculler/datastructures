@@ -20,8 +20,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-using System;
-using System.Text;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using DataStructures;
@@ -34,6 +32,7 @@ namespace DataStructuresTests
         [TestMethod]
         public void BurstTrie_Create()
         {
+            // ReSharper disable once UnusedVariable
             BurstTrie trie = new BurstTrie();
         }
         [TestMethod]
@@ -168,10 +167,10 @@ namespace DataStructuresTests
             foreach (string s in items)
                 trie.Add(s);
 
-            verifyPresence(trie, items);
+            VerifyPresence(trie, items);
         }
 
-        protected void verifyPresence(BurstTrie trie, List<string> items)
+        protected void VerifyPresence(BurstTrie trie, List<string> items)
         {
             List<string> allEntries = trie.GetAllEntries();
             Assert.AreEqual(allEntries.Count, items.Count);
@@ -329,7 +328,7 @@ namespace DataStructuresTests
         [TestMethod]
         public void BurstTrie_EnglishPerf()
         {
-            string[] strings = englishStrings;
+            string[] strings = _englishStrings;
             BurstTrie trie = new BurstTrie();
             foreach (string s in strings)
                 trie.Add(s);
@@ -338,27 +337,28 @@ namespace DataStructuresTests
                 Assert.IsTrue(trie.Contains(s));
         }
 
-        static string[] englishWords;
-        static string[] englishStrings;
-        static string[] grams;
+        static string[] _englishWords;
+        static string[] _englishStrings;
+        static string[] _grams;
 
-        static public void init()
+        public static void init()
         {
-            Util.setupBook();
-            englishStrings = Util.getManyEnglishStrings();
-            englishWords = Util.getManyEnglishWords();
-            grams = Util.getManyEnglish2Grams();
+            Util.SetupBook();
+            _englishStrings = Util.GetManyEnglishStrings();
+            _englishWords = Util.GetManyEnglishWords();
+            _grams = Util.GetManyEnglish2Grams();
         }
+
         [ClassInitialize]
-        static public void init(TestContext context)
+        public static void init(TestContext context)
         {
-            BurstBurstTrieTest.init();
+            init();
         }
 
         [TestMethod]
         public void BurstTrie_EnglishWordsPerf()
         {
-            string[] strings = englishWords;
+            string[] strings = _englishWords;
             BurstTrie trie = new BurstTrie();
             foreach (string s in strings)
                 trie.Add(s);
@@ -375,7 +375,7 @@ namespace DataStructuresTests
         {
             Dictionary<string, int> uniques = new Dictionary<string, int>();
 
-            foreach (string s in englishWords)
+            foreach (string s in _englishWords)
                 if (!uniques.ContainsKey(s))
                     uniques.Add(s, 1);
                 else
@@ -395,9 +395,9 @@ namespace DataStructuresTests
         [TestMethod]
         public void BurstTrie_NullSortEnglish2Grams()
         {
-            string[] sortableGrams = new string[grams.Length];
-            for (int i = 0; i < grams.Length; i++)
-                sortableGrams[i] = grams[i];
+            string[] sortableGrams = new string[_grams.Length];
+            for (int i = 0; i < _grams.Length; i++)
+                sortableGrams[i] = _grams[i];
             System.Array.Sort(sortableGrams);
 
             Dictionary<string, int> uniques = new Dictionary<string, int>();
@@ -418,12 +418,12 @@ namespace DataStructuresTests
         [TestMethod]
         public void BurstTrie_SortEnglishWords()
         {
-            System.Console.Out.WriteLine("Total possibly duplicated words in input: " + englishWords.Length);
+            System.Console.Out.WriteLine("Total possibly duplicated words in input: " + _englishWords.Length);
 
-            string[] strings = englishWords;
+            string[] strings = _englishWords;
             BurstTrie trie = new BurstTrie();
             foreach (string s in strings)
-                trie.Add(s); ;
+                trie.Add(s);
 
             List<string> sorted = trie.GetAllEntries();
             System.Console.Out.WriteLine("Words found through reconstruction: " + sorted.Count);
@@ -441,12 +441,12 @@ namespace DataStructuresTests
         [TestMethod]
         public void BurstTrie_SortEnglish2Grams()
         {
-            System.Console.Out.WriteLine("Total possibly duplicated words in input: " + grams.Length);
+            System.Console.Out.WriteLine("Total possibly duplicated words in input: " + _grams.Length);
 
-            string[] strings = grams;
+            string[] strings = _grams;
             BurstTrie trie = new BurstTrie();
             foreach (string s in strings)
-                trie.Add(s); ;
+                trie.Add(s);
 
             List<string> sorted = trie.GetAllEntries();
             System.Console.Out.WriteLine("Words found through reconstruction: " + sorted.Count);

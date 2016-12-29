@@ -22,9 +22,6 @@ SOFTWARE. */
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataStructures
 {
@@ -33,20 +30,20 @@ namespace DataStructures
     {
         // Burst Tries have a root trie node, each of which can resolve to either buckets or another trie node.
 
-        BurstTrieNode root = new BurstTrieNode();
+        readonly BurstTrieNode _root = new BurstTrieNode();
 
         public void Add(string word) { Add(word.ToCharArray()); }
         public void Add(char[] word)
         {
-            root.Add(word,0);
+            _root.Add(word,0);
         }
-        public bool isPresent(char[] word)
+        public bool IsPresent(char[] word)
         {
-            return root.isPresent(word);
+            return _root.IsPresent(word);
         }
-        public bool isPresent(string word) { return isPresent(word.ToCharArray()); }
-        public bool Contains(string word) { return isPresent(word.ToCharArray()); }
-        public bool Contains(char[] word) { return isPresent(word); }
+        public bool IsPresent(string word) { return IsPresent(word.ToCharArray()); }
+        public bool Contains(string word) { return IsPresent(word.ToCharArray()); }
+        public bool Contains(char[] word) { return IsPresent(word); }
 
         /// <summary>
         /// NOTE THIS METHOD HAS A BEHAVIOR YOU MAY CARE ABOUT.
@@ -58,17 +55,16 @@ namespace DataStructures
         public List<string> GetAllEntries()
         {
             List<string> items = new List<string>();
-            root.reconstruct(new char[128], 0, items);
+            _root.Reconstruct(new char[128], 0, items);
             return items;
         }
 
         public static short BurstThreshold
         {
             get
-            {  return BurstCacheBucket.burstThreshold;  }
+            {  return BurstCacheBucket.BurstThreshold;  }
             set
-            {  BurstCacheBucket.burstThreshold = value;  }
+            {  BurstCacheBucket.BurstThreshold = value;  }
         }
-
     }
 }
