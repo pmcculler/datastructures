@@ -51,12 +51,16 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="CompactTrieNodeTest.cs" />
     <Compile Include="CuckooHashTest.cs" />
     <Compile Include="IDictionaryTest.cs" />
     <Compile Include="SuffixArrayTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TrieNodeTest.cs" />
+    <Compile Include="ITrieTest.cs" />
     <Compile Include="BurstTrieTest.cs" />
+    <Compile Include="TrieNodeTest.cs" />
+    <Compile Include="TrieTest.cs" />
+    <Compile Include="UnionFindNodeTest.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

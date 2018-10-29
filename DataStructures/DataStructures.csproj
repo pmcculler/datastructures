@@ -45,13 +45,18 @@
     <Compile Include="BurstTrie\BurstNavigable.cs" />
     <Compile Include="BurstTrie\BurstTrie.cs" />
     <Compile Include="BurstTrie\BurstTrieNode.cs" />
+    <Compile Include="CompactTrie.cs" />
     <Compile Include="CuckooHash.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Hashes.cs" />
+    <Compile Include="ISuffixTrie.cs" />
+    <Compile Include="ITrie.cs" />
     <Compile Include="Preconditions.cs" />
     <Compile Include="SuffixArray.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrieNode.cs" />
+    <Compile Include="Trie.cs" />
+    <Compile Include="UnionFindNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="license.txt" />

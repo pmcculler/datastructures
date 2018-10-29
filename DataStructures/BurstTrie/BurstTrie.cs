@@ -26,7 +26,7 @@ using System.Collections.Generic;
 namespace DataStructures
 {
     [Serializable]
-    public class BurstTrie
+    public class BurstTrie : ITrie
     {
         // Burst Tries have a root trie node, each of which can resolve to either buckets or another trie node.
 

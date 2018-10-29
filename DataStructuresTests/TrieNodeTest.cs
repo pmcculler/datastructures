@@ -1,28 +1,10 @@
-﻿/* The MIT License (MIT)
-
-Copyright (c) 2015 Patrick McCuller
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE. */
-
+﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using DataStructures;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DataStructuresTests
 {
@@ -32,151 +14,98 @@ namespace DataStructuresTests
         [TestMethod]
         public void TrieNode_Create()
         {
-            // ReSharper disable once UnusedVariable
-            TrieNode trie = new TrieNode();
+            new ITrieTest().Trie_Create(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_One()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("con");
+            new ITrieTest().Trie_One(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_Contains()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("con");
-            Assert.IsTrue(trie.Contains("con"));
+            new ITrieTest().Trie_Contains(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_NotContainsUnrelated()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("a");
-            Assert.IsFalse(trie.Contains("b"));
+            new ITrieTest().Trie_NotContainsUnrelated(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_Blank()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("");
-            Assert.IsTrue(trie.Contains(""));
+            new ITrieTest().Trie_Blank(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_Empty()
         {
-            TrieNode trie = new TrieNode();
-            Assert.IsFalse(trie.Contains(""));
+            new ITrieTest().Trie_Empty(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_AllContained()
         {
-            TrieNode trie = new TrieNode();
-            string[] data = {   "abc", "abd", "abe", 
-                                "fonduepot", "fondue", "l",
-                                "f", "0", "aaaaaaaaaaaaaaaaa",
-                                "jkjkjkjkaaaaa", "aaaaaaaaa", "fabc" };
-            List<string> items = new List<string>(data);
-
-            foreach (string s in items)
-                trie.Add(s);
-
-            VerifyPresence(trie, items);
-        }
-        protected void VerifyPresence(TrieNode trie, List<string> items)
-        {
-            List<string> allEntries = trie.GetAllEntries();
-            Assert.AreEqual(allEntries.Count, items.Count);
-
-            foreach (string s in items)
-                Assert.IsTrue(allEntries.Contains(s));
+            new ITrieTest().Trie_AllContained(new TrieNode());
         }
 
         [TestMethod]
         public void TrieNode_NotContains()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("con");
-            Assert.IsFalse(trie.Contains("coo"));
-            Assert.IsFalse(trie.Contains("cona"));
-            Assert.IsFalse(trie.Contains("ocon"));
-            Assert.IsFalse(trie.Contains("noc"));
-            Assert.IsFalse(trie.Contains("cno"));
-            Assert.IsFalse(trie.Contains("ocn"));
-            Assert.IsFalse(trie.Contains("ccc"));
-            Assert.IsFalse(trie.Contains("nnn"));
-            Assert.IsFalse(trie.Contains("ooo"));
+            new ITrieTest().Trie_NotContains(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_SubstringNotContains()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("abcde");
-            Assert.IsFalse(trie.Contains("a"));
-            Assert.IsFalse(trie.Contains("ab"));
-            Assert.IsFalse(trie.Contains("abc"));
-            Assert.IsFalse(trie.Contains("abcd"));
-            Assert.IsFalse(trie.Contains("bcde"));
-            Assert.IsFalse(trie.Contains("cde"));
-            Assert.IsFalse(trie.Contains("de"));
-            Assert.IsFalse(trie.Contains("e"));
-            Assert.IsFalse(trie.Contains("b"));
-            Assert.IsFalse(trie.Contains("c"));
-            Assert.IsFalse(trie.Contains("d"));
+            new ITrieTest().Trie_SubstringNotContains(new TrieNode());
         }
+
         [TestMethod]
         public void TrieNode_MultiNotContains()
         {
-            TrieNode trie = new TrieNode();
-            trie.Add("con");
-            trie.Add("cono");
-            trie.Add("foo");
-            trie.Add("fon");
-            trie.Add("fondue");
-
-            Assert.IsTrue(trie.Contains("con"));
-            Assert.IsTrue(trie.Contains("fon"));
-            Assert.IsTrue(trie.Contains("fondue"));
-            Assert.IsFalse(trie.Contains("fo"));
-            Assert.IsFalse(trie.Contains("cor"));
-            Assert.IsFalse(trie.Contains("corse"));
-            Assert.IsFalse(trie.Contains("fondu"));
-            Assert.IsFalse(trie.Contains("f"));
-            Assert.IsFalse(trie.Contains("x"));
+            new ITrieTest().Trie_MultiNotContains(new TrieNode());
         }
 
-        //// This test can take 9+ seconds.
-        //[TestMethod]
-        //public void Trie_EnglishPerf()
-        //{
-        //    string[] strings = englishStrings;
-        //    TrieNode trie = new TrieNode();
-        //    foreach (string s in strings)
-        //        trie.Add(s);
-
-        //    foreach (string s in strings)
-        //        Assert.IsTrue(trie.Contains(s));
-        //}
-
-        static string[] _englishWords;
-
         [ClassInitialize]
-        public static void init(TestContext context)
+        public static void init(TestContext contextIgnored)
         {
-            Util.SetupBook();
-            Util.GetManyEnglishStrings();
-            _englishWords = Util.GetManyEnglishWords();
+            ITrieTest.init();
         }
 
         [TestMethod]
-        public void Trie_EnglishWordsPerf()
+        public void TrieNode_EnglishWordsPerf()
         {
-            string[] strings = _englishWords;
-            TrieNode trie = new TrieNode();
-            foreach (string s in strings)
-                trie.Add(s);
-            foreach (string s in strings)
-                Assert.IsTrue(trie.Contains(s));
+            new ITrieTest().Trie_EnglishWordsPerf(new TrieNode());
         }
+
+        [TestMethod]
+        public void TrieNode_SingleContained()
+        {
+            new ITrieTest().Trie_SingleContained(new TrieNode());
+        }
+
+        [TestMethod]
+        public void TrieNode_SingleContainedOppositeOrder()
+        {
+            new ITrieTest().Trie_SingleContainedOppositeOrder(new TrieNode());
+        }
+
+        [TestMethod]
+        public void TrieNode_ResultingResultsResultings()
+        {
+            new ITrieTest().Trie_ResultingResultsResultings(new TrieNode());
+        }
+
+        [TestMethod]
+        public void Trie_FooFonFondue()
+        {
+            new ITrieTest().Trie_FooFonFondue(new TrieNode());
+        }
+
     }
 }

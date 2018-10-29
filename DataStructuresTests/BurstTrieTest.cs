@@ -365,7 +365,7 @@ namespace DataStructuresTests
             foreach (string s in strings)
                 Assert.IsTrue(trie.Contains(s));
         }
-
+        
         /// <summary>
         /// This sorts using a built-in method only, Array.Sort().
         /// Note that this pre-filters out duplicates.

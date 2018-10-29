@@ -28,7 +28,7 @@ using System.Text;
 namespace DataStructures
 {
     [Serializable]
-    public class TrieNode
+    public class TrieNode : ITrie
     {
         private static char ARBITRARY_ROOT_VALUE = '_';
 
@@ -74,18 +74,17 @@ namespace DataStructures
             return items;
         }
 
-        public bool IsPresent(string word) { return IsPresent(word.ToCharArray()); }
-        public bool Contains(string word) { return IsPresent(word.ToCharArray()); }
-        public bool Contains(char[] word) { return IsPresent(word); }
+        public bool IsPresent(string word) { return IsPresent(word.ToCharArray(), 0); }
+        public bool Contains(string word) { return IsPresent(word.ToCharArray(), 0); }
+        public bool Contains(char[] word) { return IsPresent(word, 0); }
 
         /// <summary>
         /// Searches compacted and uncompacted trie.
         /// </summary>
-        /// <param name="word"></param>
         /// <returns></returns>
-        public bool IsPresent(char[] word)
+        public bool IsPresent(char[] word, int start)
         {
-            if (word.Length == 0)
+            if (word.Length-start == 0)
                 return end;
 
             if (next == null)
@@ -97,39 +96,36 @@ namespace DataStructures
                     continue;
 
                 bool found = false;
-                for (int i = 0; i < node.me.Length; i++)
+                for (int i = start, j = 0; j < node.me.Length; i++, j++)
                 {
-                    if (node.me[i] != word[i])
+                    if (node.me[j] != word[i])
                     {
                         found = false;
                         break;
                     }
                     found = true;
                 }
-                if (found) // this node is the correct node. copy the word remainder.
+                if (found) // this node is the correct node.
                 {
-                    char[] newWord = new char[word.Length - node.me.Length];
-                    for (int i = node.me.Length, j = 0; j < word.Length - node.me.Length; i++, j++)
-                        newWord[j] = word[i];
-                    return node.IsPresent(newWord);
+                    return node.IsPresent(word, start+1);
                 }
             }
             return false;
         }
-        public void Add(string word) { Add(word.ToCharArray()); }
+
+        public void Add(string word) { Add(word.ToCharArray(), 0); }
 
         /// <summary>
         /// Adds word to tree; only adds singles, does not maintain patricia/radix style.
         /// </summary>
-        /// <param name="word"></param>
-        public void Add(char[] word)
+        public void Add(char[] word, int start)
         {
-            if (word.Length == 0)
+            if (word.Length == start)
             {
                 end = true;
                 return;
             }
-            char c = word[0];
+            char c = word[start];
 
             TrieNode target = null;
             if (next == null)
@@ -152,12 +148,8 @@ namespace DataStructures
                 newNext[next.Length] = target;
                 next = newNext;
             }
-            char[] newWord = new char[word.Length - 1];
 
-            for (int i = 1, j = 0; j < word.Length - 1; i++, j++)
-                newWord[j] = word[i];
-
-            target.Add(newWord);
+            target.Add(word, start +1);
         }
 
         #region utility       
