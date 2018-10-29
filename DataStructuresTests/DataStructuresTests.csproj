@@ -62,6 +62,7 @@
     <Compile Include="TrieTest.cs" />
     <Compile Include="UnionFindNodeTest.cs" />
     <Compile Include="Util.cs" />
+    <Compile Include="UTrieTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataStructures\DataStructures.csproj">
